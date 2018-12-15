@@ -33,10 +33,10 @@ class RemoveEvent<T> extends AbstractEvent<T> {
         return obsValue;
     }
 
-//    @Override
-//    public void preventConsume() {
-//        this.preventConsume = true;
-//    }
+    @Override
+    public void preventConsume() {
+        this.preventConsume = true;
+    }
 
     @Override
     protected boolean preventConsumeEnabled() {

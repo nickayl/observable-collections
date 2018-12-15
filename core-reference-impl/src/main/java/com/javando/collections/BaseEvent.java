@@ -10,7 +10,7 @@ class BaseEvent<V> extends AbstractEvent<V> {
     private ObservableObject<V> value;
     private IndexedSource<V> indexedSource;
 
-    private boolean preventConsume=false;
+    private boolean preventConsume = false;
 
     public BaseEvent() {
     }
@@ -55,7 +55,7 @@ class BaseEvent<V> extends AbstractEvent<V> {
 
     @Override
     public void preventConsume() throws UnsupportedOperationException {
-        if(!isSupported(eventType))
+        if (!isSupported(eventType))
             super.preventConsume();
 
 
@@ -70,13 +70,20 @@ class BaseEvent<V> extends AbstractEvent<V> {
 
     @Override
     public int getIndex() {
-        if(indexedSource != null)
+        if (indexedSource != null)
             return indexedSource.getIndexOf(value.getValue());
         return -1;
     }
 
     private boolean isSupported(EventType eventType) {
-        return eventType.equals(EventType.ADD_ELEMENT_EVENT);
+        return eventType.equals(EventType.ADD_ELEMENT_EVENT) ||
+                eventType.equals(EventType.REMOVE_ELEMENT_EVENT);
+    }
+
+    public void reset() {
+        this.preventConsume = false;
+        this.indexedSource = null;
+        this.value = null;
     }
 
     //    @Override
