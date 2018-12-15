@@ -44,13 +44,13 @@ class Events {
         private ChangeEvent<T> changeEvent = new ChangeEvent<>();
 
         AbstractEvent<T> getRecycledEvent(EventType eventType, ObservableObject<T> observableValue, IndexedSource<T> indexedSource) {
-            baseEvent.setEventType(eventType);
-            baseEvent.setValue(observableValue);
+            getRecycledEvent(eventType, observableValue);
             baseEvent.setIndexedSource(indexedSource);
             return baseEvent;
         }
 
         AbstractEvent<T> getRecycledEvent(EventType eventType, ObservableObject<T> observableValue) {
+            baseEvent.reset();
             baseEvent.setEventType(eventType);
             baseEvent.setValue(observableValue);
             return baseEvent;

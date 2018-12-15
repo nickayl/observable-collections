@@ -107,10 +107,24 @@ class ObservableArrayList<V> extends ArrayList<V> implements ObservableList<V>, 
             throw new IllegalArgumentException("Cannot remove element - Illegal argument given: " + o.getClass());
         }
 
-        fireRemoveEvent(o);
-        observableValuesMap.remove(o);
+        if(indexOf(o) == -1) {
+            System.out.format("\n\n*** WARNING *** ---> Trying to remove an unexistent element: %s <---\n\n",o);
+            return false;
+        }
 
+        final boolean[] shouldStop = {false};
+
+        fireTargetEvent(EventType.REMOVE_ELEMENT_EVENT, observableValuesMap.get(o), event -> {
+            if (event.preventConsumeEnabled())
+                shouldStop[0] = true;
+        });
+
+        if (shouldStop[0])
+            return false;
+
+        observableValuesMap.remove(o);
         return super.remove(o);
+
     }
 
     @Override
@@ -168,13 +182,32 @@ class ObservableArrayList<V> extends ArrayList<V> implements ObservableList<V>, 
         }
     }
 
-    private void fireRemoveEvent(Object o) {
-        for (EventListener<V> eventListener : onRemoveEventListeners) {
-            eventListener.handleEvent(Events.newInstance(EventType.REMOVE_ELEMENT_EVENT,
-                    observableValuesMap.get(o),
-                    this));
+    private void fireTargetEvent(EventType eventType, ObservableObject<V> element, EventResult<AbstractEvent<V>> eventResult) {
+        benchmark.start();
+
+        for (EventListener<V> eventListener : getEventList(eventType)) {
+            AbstractEvent<V> event = Events.newInstance(eventType, element);
+
+            eventListener.handleEvent(event);
+
+            if (eventResult != null) {
+                eventResult.onEventHandled(event);
+            }
         }
+
+        fireGlobalEvents(element, null);
+
+        benchmark.stop();
+        benchmark.logResults();
     }
+
+//    private void fireRemoveEvent(Object o) {
+//        for (EventListener<V> eventListener : onRemoveEventListeners) {
+//            eventListener.handleEvent(Events.newInstance(EventType.REMOVE_ELEMENT_EVENT,
+//                    observableValuesMap.get(o),
+//                    this));
+//        }
+//    }
 
 
     @Override
@@ -254,13 +287,14 @@ class ObservableArrayList<V> extends ArrayList<V> implements ObservableList<V>, 
         return res;
     }
 
-    // ---- Observer method impl ---- //
 
+    // ---- Observer method impl ---- //
     @Override
     public void notifyChange(ObservableObject<V> observable, V oldValue) {
         System.out.format("Element changed. Index of %s: %d\n", observable.getValue(), index);
         set(indexOf(oldValue), observable.getValue());
     }
+
 
     // -------------------------------------- //
 
@@ -281,6 +315,7 @@ class ObservableArrayList<V> extends ArrayList<V> implements ObservableList<V>, 
     private class IteratorKlass implements Iterator<ObservableObject<V>> {
 
         private int curPos = 0;
+
         private List<ObservableObject<V>> list = new ArrayList<>(observableValuesMap.values());
 
         @Override
@@ -299,6 +334,7 @@ class ObservableArrayList<V> extends ArrayList<V> implements ObservableList<V>, 
             throw new UnsupportedOperationException();
         }
 
+
 //        @Override
 //        public void forEachRemaining(Consumer<? super ObservableObject<V>> action) {
 //            throw new NotImplementedException();
@@ -314,6 +350,7 @@ class ObservableArrayList<V> extends ArrayList<V> implements ObservableList<V>, 
             return iterator;
         }
 
+
 //        @Override
 ////        public void forEach(Consumer<? super ObservableObject<V>> action) {
 ////            while (iterator.hasNext())
@@ -327,9 +364,27 @@ class ObservableArrayList<V> extends ArrayList<V> implements ObservableList<V>, 
 
     }
 
-//            eventListener.handleEvent(
+    //            eventListener.handleEvent(
 //                    new BaseEvent<>(EventType.ADD_ELEMENT_EVENT, valueChanged), index);
     //        for(Map.Entry<String, EventListener<T>> entry : eventListeners.entrySet()) {
 //            entry.getValue().handleEvent(t);
 //        }
+    private List<EventListener<V>> getEventList(EventType eventType) {
+        switch (eventType) {
+            case ADD_ELEMENT_EVENT:
+                return onAddEventListeners;
+
+            case REMOVE_ELEMENT_EVENT:
+                return onRemoveEventListeners;
+
+            case CHANGE_ELEMENT_EVENT:
+                return onChangeEventListeners;
+
+            case READ_ELEMENT_EVENT:
+                return onGetEventListeners;
+
+            default:
+                return null;
+        }
+    }
 }

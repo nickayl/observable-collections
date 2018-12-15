@@ -103,20 +103,25 @@ public class ObservableArrayListTests {
         obsArrayList.sout();
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void preventConsume__REMOVE__TEST() throws Event.UnsupportedOperationException {
+
         obsArrayList.addOnRemoveEventListener(new EventListener<String>() {
             @Override
             public void handleEvent(Event<String> event) {
                 try {
                     event.preventConsume();
+                    eventCalled = true;
                 } catch (Event.UnsupportedOperationException e) {
                     e.printStackTrace();
+                    fail();
                 }
             }
         });
 
-        obsArrayList.remove("Domenico");
+        obsArrayList.remove("Fiorella");
+        assertTrue(eventCalled);
+        assertNotEquals(-1, obsArrayList.indexOf("Fiorella"));
     }
 
 
@@ -135,6 +140,7 @@ public class ObservableArrayListTests {
         String value = "Domenico";
         int indexOf = obsArrayList.indexOf(value);
         int oldSize = obsArrayList.size();
+        obsArrayList.remove(value);
         obsArrayList.remove(value);
         // === Tests === //
         assertThat(obsArrayList.get(indexOf), is(not(value)));
