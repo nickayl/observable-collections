@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.javando.collections</groupId>
+    <artifactId>observable-collections</artifactId>
+    <version>1.0.1.RC</version>
+
+
+    <modules>
+        <module>core-api</module>
+        <module>core-reference-impl</module>
+    </modules>
+
+    <packaging>pom</packaging>
+
+    <properties>
+        <java.compileVersion>1.8</java.compileVersion>
+        <java.testCompileVersion>1.8</java.testCompileVersion>
+        <logback.version>1.2.3</logback.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <junit4.version>4.12</junit4.version>
+        <hamcrest-junit.version>2.0.0.0</hamcrest-junit.version>
+        <!--<lombok.version>1.18.4</lombok.version>-->
+        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+        <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
+        <maven-shade-plugin.version>3.2.0</maven-shade-plugin.version>
+    </properties>
+
+    <dependencyManagement>
+
+        <dependencies>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-junit</artifactId>
+                <version>${hamcrest-junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!--<dependency>-->
+            <!--<groupId>ch.qos.logback</groupId>-->
+            <!--<artifactId>logback-classic</artifactId>-->
+            <!--<version>${logback.version}</version>-->
+            <!--</dependency>-->
+
+            <!--<dependency>-->
+            <!--<groupId>org.projectlombok</groupId>-->
+            <!--<artifactId>lombok</artifactId>-->
+            <!--<version>${lombok.version}</version>-->
+            <!--</dependency>-->
+        </dependencies>
+
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+
+                <configuration>
+                    <source>${java.compileVersion}</source>
+                    <target>${java.compileVersion}</target>
+                    <testSource>${java.testCompileVersion}</testSource>
+                    <testTarget>${java.testCompileVersion}</testTarget>
+                    <excludes>
+                        <exclude>**/com/javando/collections/manualtests/*.java</exclude>
+                    </excludes>
+                </configuration>
+
+                <!--<executions>-->
+                <!--<execution>-->
+                <!--<id>test-compile</id>-->
+                <!--<phase>process-test-sources</phase>-->
+                <!--<goals>-->
+                <!--<goal>testCompile</goal>-->
+                <!--</goals>-->
+                <!--<configuration>-->
+                <!--<source>${java.testCompileVersion}</source>-->
+                <!--<target>${java.testCompileVersion}</target>-->
+                <!--</configuration>-->
+                <!--</execution>-->
+                <!--</executions>-->
+
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>${maven-install-plugin.version}</version>
+            </plugin>
+
+            <!-- Maven Shade Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${maven-shade-plugin.version}</version>
+                <executions>
+                    <!-- Run shade goal on package phase -->
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
+
+        <!--<dependency>-->
+        <!--<groupId>org.slf4j</groupId>-->
+        <!--<artifactId>slf4j-com.javando.collections.api</artifactId>-->
+        <!--<version>${slf4j.version}</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>org.fusesource.jansi</groupId>-->
+        <!--<artifactId>jansi</artifactId>-->
+        <!--<version>1.8</version>-->
+        <!--</dependency>-->
+
+        <!--<configuration>-->
+        <!--<filters>-->
+        <!--<filter>-->
+        <!--<artifact>com.javando.collections:core-api</artifact>-->
+        <!--<excludes>-->
+        <!--<exclude>com/javando/collections/api/**</exclude>-->
+        <!--</excludes>-->
+        <!--</filter>-->
+        <!--</filters>-->
+        <!--</configuration>-->
+        <!--<configuration>-->
+        <!--<transformers>-->
+        <!--&lt;!&ndash; add Main-Class to manifest file &ndash;&gt;-->
+        <!--<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">-->
+        <!--<mainClass>com.mkyong.core.utils.App</mainClass>-->
+        <!--</transformer>-->
+        <!--</transformers>-->
+        <!--</configuration>-->

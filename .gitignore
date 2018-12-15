@@ -1,0 +1,6 @@
+*reduced-pom.xml
+*.iml
+.idea/
+target/
+**/Main*.java
+**/manualtests
