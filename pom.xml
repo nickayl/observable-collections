@@ -67,9 +67,9 @@
                     <target>${java.compileVersion}</target>
                     <testSource>${java.testCompileVersion}</testSource>
                     <testTarget>${java.testCompileVersion}</testTarget>
-                    <!--<excludes>-->
-                        <!--<exclude>**/com/javando/collections/manualtests/*.java</exclude>-->
-                    <!--</excludes>-->
+                    <excludes>
+                        <exclude>**/com/javando/collections/manualtests/*.java</exclude>
+                    </excludes>
                 </configuration>
 
                 <!--<executions>-->
