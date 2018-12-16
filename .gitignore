@@ -1,4 +1,4 @@
-*reduced-pom.xml
+**/*reduced-pom.xml
 *.iml
 .idea/
 target/

@@ -45,6 +45,9 @@ class BaseEvent<V> extends AbstractEvent<V> {
 
     @Override
     public V getValue() {
+        if(value == null)
+            throw new NullPointerException("ObservableObject value in BaseEvent null");
+
         return value.getValue();
     }
 
