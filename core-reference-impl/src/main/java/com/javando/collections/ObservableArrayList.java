@@ -68,7 +68,6 @@ class ObservableArrayList<V> extends ArrayList<V> implements ObservableList<V>, 
                         //log.debug("Prevent consume on add element: {}", t);
                         System.out.format("Prevent consume on add element: %s", t);
                         wrappedValue.unregisterObserver(ObservableArrayList.this);
-                        observableValuesMap.remove(t);
                         remove(t);
                     }
 
