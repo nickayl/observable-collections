@@ -23,6 +23,21 @@ Then add the dependency :
     <version>1.0.1-RC</version>
 </dependency>
 ```
+<h4>Gradle</h4>
+First you have to add the jitpack repository to your global build.gradle file:
+
+``` groovy
+allprojects {
+        repositories {
+            maven { url 'https://jitpack.io' }
+        }
+    }
+```
+
+Then, add the dependency to your project-local build.gradle :
+``` groovy
+implementation 'com.github.cyclonesword:observable-collections:1.0.1-RC'
+```
 
 <h3>Usage</h4>
 
